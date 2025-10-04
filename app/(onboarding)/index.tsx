@@ -1,9 +1,10 @@
+import SnapCarouselView from "@/components/snap-carousel";
 import { screenData } from "@/constants/onboarding-screen";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -18,14 +19,10 @@ import {
 
 export default function OnboardingScreen() {
   const [currentStep, setCurrentStep] = useState(0);
+  const primaryColor = useThemeColor({}, "primary");
+  const secondaryColor = useThemeColor({}, "secondary");
+  const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
-
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const pageIndex = Math.round(
-      e.nativeEvent.contentOffset.x / e.nativeEvent.layoutMeasurement.width
-    );
-    setCurrentStep(pageIndex);
-  };
 
   const handleSelectStep = (index: number) => {
     setCurrentStep(index);
@@ -37,14 +34,7 @@ export default function OnboardingScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        ref={scrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={handleScroll}
-        scrollEventThrottle={16}
-      >
+      <SnapCarouselView setCurrentStep={setCurrentStep} ref={scrollRef}>
         {screenData.map((item, index) => (
           <View key={index} style={styles.body}>
             <View style={styles.imageContainer}>
@@ -53,13 +43,17 @@ export default function OnboardingScreen() {
             <Text style={styles.txt}>{item.text}</Text>
           </View>
         ))}
-      </ScrollView>
+      </SnapCarouselView>
 
       <View style={styles.stepsContainer}>
         {screenData.map((_, i) => (
           <Pressable onPress={() => handleSelectStep(i)} key={i}>
             <View
-              style={i === currentStep ? styles.activeStep : styles.steps}
+              style={
+                i === currentStep
+                  ? { ...styles.activeStep, backgroundColor: primaryColor }
+                  : styles.steps
+              }
             />
           </Pressable>
         ))}
@@ -68,16 +62,19 @@ export default function OnboardingScreen() {
       <View style={styles.btnsContainer}>
         <Button
           mode="elevated"
-          buttonColor="#5E2BB7"
+          buttonColor={primaryColor}
           textColor="#fff"
           uppercase
           labelStyle={styles.btnText}
           contentStyle={styles.btnContent}
+          onPress={() => router.push("/(onboarding)/get-started")}
         >
           Get Started
         </Button>
         <Button
           mode="elevated"
+          buttonColor={secondaryColor}
+          textColor={primaryColor}
           uppercase
           labelStyle={styles.btnText}
           contentStyle={styles.btnContent}
@@ -131,7 +128,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 35,
     height: 10,
-    backgroundColor: "#5E2BB7",
   },
   btnsContainer: {
     marginTop: "auto",

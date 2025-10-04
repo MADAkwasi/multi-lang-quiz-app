@@ -9,6 +9,9 @@ export default function OnboardingLayout() {
       }}
     >
       <Stack.Screen name="index" />
+      <Stack.Screen name="get-started" />
+      {/* <Stack.Screen name="sign-in" />
+      <Stack.Screen name="sign-up" /> */}
     </Stack>
   );
 }
