@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Pressable, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
@@ -7,14 +7,15 @@ interface Props {
   icon: any;
   color: string;
   text: string;
+  onPress?: () => void;
 }
 
-export default function Option({ icon, color, text }: Props) {
+export default function Option({ icon, color, text, onPress }: Props) {
   return (
-    <Pressable>
+    <Pressable android_ripple={{ color: "#ccc" }} onPress={onPress}>
       <View style={styles.optionContainer}>
         <View style={{ ...styles.iconContainer, backgroundColor: color }}>
-          <FontAwesome name={icon} size={34} color="#eee" />
+          <FontAwesome5 name={icon} size={34} color="#eee" />
         </View>
         <ThemedText type="subtitle">{text}</ThemedText>
       </View>
