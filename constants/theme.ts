@@ -12,10 +12,12 @@ export const Colors = {
   light: {
     primary: "#5E2BB7",
     secondary: "#eae1fa",
+    text: "#222",
   },
   dark: {
     primary: "",
     secondary: "",
+    text: "",
   },
 };
 
